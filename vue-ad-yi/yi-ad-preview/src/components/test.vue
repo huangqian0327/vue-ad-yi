@@ -3,24 +3,24 @@
     <div class="logo">
       <h2>广告预览logo</h2>
       <YiAdPreview 
-        :width="testObj1.width" 
-        :height="testObj1.height"
+        :width="width" 
+        :height="height"
         :bgUrl="testObj1.bgUrl"
         :type="testObj1.type"
-        :resource="testObj1.resource"
+        :resourceList="testObj1.resourceList"
         :theme="testObj1.theme"
-        ref="ref1" />
+        id="logo"/>
     </div>
     <div class="bubble">
       <h2>广告预览bubble</h2>
       <YiAdPreview 
-        :width="testObj2.width" 
-        :height="testObj2.height"
+        :width="width" 
+        :height="height"
         :bgUrl="testObj2.bgUrl"
         :type="testObj2.type"
-        :resource="testObj2.resource"
-        :theme="testObj2.theme" 
-        ref="ref2"/>
+        :resourceList="testObj2.resourceList"
+        :theme="testObj2.theme"
+        id="bubble"/>
     </div>
   </div>
 </template>
@@ -34,110 +34,88 @@
     },
     data () {
       return {
+        width: 600,
+        height: 500,
         bubble: {
-          width: '600',
-          height: '400', 
           type: 'bubble',
-
-          bgWidth: '500',
-          bgHeight: '300', 
-          bgUrl: 'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-06-22/12230_black.jpeg',
-          bgX: '10',
-          bgY: '10',
-            
-          theme: [
+          bgUrl: 'https://dummyimage.com/1920x1080/99D9EA/fff',      
+          theme: {
+            width: 0.5,
+            height: 0.5,
+            left: 0.1,
+            bottom: 0.5,
+          },
+          resourceList: [
             {
-              width: '300',
-              height: '200',
-              x: '10',
-              y: '100',
-            }
-          ],
-
-          resource: [
-            {
-              width: '200',
-              height: '60',
-              x: '0',
-              y: '100',
+              width: 0.8,
+              height: 0.1,
+              x: 0.1,
+              y: 0.1,
               animation: 'bottom',
-              duration: '1',
-              delay: '0',
+              duration: 1,
+              delay: 0,
+              url: 'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-07-20/52082_1.png'                     
+            },
+            {
+              width: 0.8,
+              height: 0.1,
+              x: 0.1,
+              y: 0.3,
+              animation: 'bottom',
+              duration: 1,
+              delay: 1,
               url: 'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-07-20/52082_1.png'            
             },
             {
-              width: '200',
-              height: '60',
-              x: '0',
-              y: '100',
+              width: 0.8,
+              height: 0.1,
+              x: 0.1,
+              y: 0.5,
               animation: 'bottom',
-              duration: '1',
-              delay: '0',
+              duration: 1,
+              delay: 2,
               url: 'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-07-20/52082_1.png'            
             },
             {
-              width: '200',
-              height: '60',
-              x: '0',
-              y: '100',
+              width: 0.8,
+              height: 0.1,
+              x: 0.1,
+              y: 0.7,
               animation: 'bottom',
-              duration: '1',
-              delay: '0',
-              url: 'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-07-20/52082_1.png'            
-            },
-            {
-              width: '200',
-              height: '60',
-              x: '0',
-              y: '100',
-              animation: 'bottom',
-              duration: '1',
-              delay: '0',
+              duration: 1,
+              delay: 3,
               url: 'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-07-20/52082_1.png'            
             }
           ]
         },
         logo: {
-          width: '600',
-          height: '400', 
           type: 'logo',
+          bgUrl: 'https://dummyimage.com/1920x1080/99D9EA/fff',
+          theme: {
+            width: 0.5,
+            height: 0.5,
+            left: 0.1,
+            bottom: 0.5,
+          },
 
-          bgWidth: '500',
-          bgHeight: '300', 
-          bgUrl: 'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-06-22/12230_black.jpeg',
-          bgX: '10',
-          bgY: '10',
-            
-          theme: [
+          resourceList: [
             {
-              width: '300',
-              height: '200',
-              x: '10',
-              y: '100',
-            }
-          ],
-
-          resource: [
-            {
-              width: '200',
-              height: '60',
-              x: '0',
-              y: '100',
-              animation: 'bottom',
-              duration: '1',
-              delay: '0',
+              width: 0.8,
+              height: 0.3,
+              x: 0.05,
+              y: 0.05,
+              animation: 'right',
+              duration: 1,
+              delay: 0,
               url: 'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-07-20/58842_2.png'            
             }
           ]
-          
         },
-
         testObj1: {},
         testObj2: {}
-        
       }
     },
-    mounted () {
+    created () {
       //品牌展示测试
       this.testObj1 = this.logo
       this.testObj2 = this.bubble
