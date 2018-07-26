@@ -1,9 +1,10 @@
 {
   "name": "yi-ad-preview",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "A Vue.js project",
   "author": "huangqian0327 <huangqian@yijia.ai>",
-  "private": true,
+  "private": false,
+  "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
@@ -15,7 +16,6 @@
   "dependencies": {
     "less": "^3.7.1",
     "less-loader": "^4.1.0",
-    "phantomjs-prebuilt": "^2.1.16",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

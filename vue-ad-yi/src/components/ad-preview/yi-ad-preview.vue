@@ -94,8 +94,8 @@
       },
       setResource () {
         let theme = document.querySelector(`#${this.id} .yi-ad-preview-theme`)
-        let resource = document.querySelectorAll(`.${this.id} .yi-ad-preview-resource`)
-        let resourceImg = document.querySelectorAll(`.${this.id} .yi-ad-preview-resource > img`)
+        let resource = document.querySelectorAll(`#${this.id} .yi-ad-preview-resource`)
+        let resourceImg = document.querySelectorAll(`#${this.id} .yi-ad-preview-resource > img`)
         let {w: themeWidth, h: themeHeight} = this.getElementAttr(theme)
 
         this.resourceList.forEach((item, index) => {
@@ -145,7 +145,7 @@
           b: themeBottom,
           l: themeLeft
         } = this.getElementAttr(theme)
-        let resource = document.querySelectorAll(`.${this.id} .yi-ad-preview-resource`)
+        let resource = document.querySelectorAll(`#${this.id} .yi-ad-preview-resource`)
 
         this.resourceList.forEach((item, index) => {
           //获取当前资源的宽高
@@ -163,7 +163,7 @@
               clearInterval(item.timer)
               //横坐标不变，纵坐标变             
               //记录当前定位的位置为资源的结束位置
-              item.originalPosition = resource[index].style.top
+              item.originalPosition = Number(resource[index].style.top.replace('px', ''))
               item.timerDelay = setTimeout(() => {
                 //开始运动显示资源
                 resource[index].style.display = 'block'
@@ -179,9 +179,7 @@
 
                 item.timer = setInterval(() => {
                   if (parseInt(resource[index].style.top.replace('px', '')) <= parseInt(item.stopPosition)) {
-                    console.log(index, parseInt(resource[index].style.top.replace('px', '')), parseInt(item.stopPosition))
                     resource[index].style.top = Number(resource[index].style.top.replace('px', '')) + this.step + 'px'
-                    
                   } else {
                     clearInterval(item.timer)
                   }
@@ -208,10 +206,8 @@
                 item.unitTime = (item.duration * 1000 * this.step) / Math.abs(item.stopPosition - item.startPosition)  
 
                 item.timer = setInterval(() => {
-                  if (parseInt(resource[index].style.right.replace('px', '')) <= parseInt(item.stopPosition)) {
-                    console.log(index, parseInt(resource[index].style.right.replace('px', '')), parseInt(item.stopPosition))
+                  if (parseInt(resource[index].style.right.replace('px', '')) <= parseInt(item.stopPosition)) {    
                     resource[index].style.right = Number(resource[index].style.right.replace('px', '')) + this.step + 'px'
-                    
                   } else {
                     clearInterval(item.timer)
                   }
@@ -239,9 +235,7 @@
 
                 item.timer = setInterval(() => {
                   if (parseInt(resource[index].style.bottom.replace('px', '')) <= parseInt(item.stopPosition)) {
-                    console.log(index, parseInt(resource[index].style.bottom.replace('px', '')), parseInt(item.stopPosition))
                     resource[index].style.bottom = Number(resource[index].style.bottom.replace('px', '')) + this.step + 'px'
-                    
                   } else {
                     clearInterval(item.timer)
                   }
@@ -253,7 +247,7 @@
               clearInterval(item.timer)
               //纵坐标不变，横坐标变             
               //记录当前定位的位置为资源的结束位置
-              item.originalPosition = resource[index].style.left
+              item.originalPosition = Number(resource[index].style.left.replace('px', ''))
               item.timerDelay = setTimeout(() => {
                 //开始运动显示资源
                 resource[index].style.display = 'block'
@@ -269,9 +263,7 @@
 
                 item.timer = setInterval(() => {
                   if (parseInt(resource[index].style.left.replace('px', '')) <= parseInt(item.stopPosition)) {
-                    console.log(index, parseInt(resource[index].style.left.replace('px', '')), parseInt(item.stopPosition))
                     resource[index].style.left = Number(resource[index].style.left.replace('px', '')) + this.step + 'px'
-                    
                   } else {
                     clearInterval(item.timer)
                   }
@@ -284,10 +276,13 @@
       }
     },
     mounted () {
-      this.setBg()
-      this.setTheme()
-      this.setResource()
-      this.animate()
+      setTimeout(() => {
+        this.setBg()
+        this.setTheme()
+        this.setResource()
+        this.animate()
+      }, 10)
+      
     }
   }
 </script>
@@ -298,9 +293,6 @@
     width: 100%;
     height: 100%;
     background-color: #000;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
     .yi-ad-preview-bg {
       position: absolute;
       background-color: #aaa;
