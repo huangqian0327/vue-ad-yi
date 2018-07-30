@@ -1,10 +1,10 @@
 {
-  "name": "yi-ad-preview",
-  "version": "1.0.3",
+  "name": "vue-ad-yi",
+  "version": "1.1.5",
   "description": "A Vue.js project",
   "author": "huangqian0327 <huangqian@yijia.ai>",
   "private": false,
-  "main": "index.js",
+  "main": "src/components/index.js",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",

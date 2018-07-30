@@ -12,7 +12,8 @@
           :resourceList="testObj1.resourceList"
           :theme="testObj1.theme"
           id="logo"
-          class="ad-preview"/>
+          class="ad-preview"
+          :style="{width: this.width, height: this.height}"/>
       </div>
       <div class="bubble">
         <h2>广告预览bubble</h2>
@@ -24,7 +25,8 @@
           :resourceList="testObj2.resourceList"
           :theme="testObj2.theme"
           id="bubble"
-          class="ad-preview"/>
+          class="ad-preview"
+          :style="{width: this.width, height: this.height}"/>
       </div>
     </div>
   </div>
@@ -41,8 +43,8 @@
     inject: ['reload'],
     data () {
       return {
-        width: 600,
-        height: 500,
+        width: '100%',
+        height: '100%',
         bubble: {
           type: 'bubble',
           bgUrl: 'https://dummyimage.com/1920x1080/99D9EA/fff',      

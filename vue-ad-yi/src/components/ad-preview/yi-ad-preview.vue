@@ -11,7 +11,7 @@
       <img v-if="bgUrl" :src="bgUrl" alt="">
       <div class="yi-ad-preview-theme">
         <ul>
-          <li v-if="resourceList" v-for="item in resourceList" class="yi-ad-preview-resource">
+          <li v-if="resourceListNow" v-for="item in resourceListNow" class="yi-ad-preview-resource">
             <img :src="item.url">
           </li>
         </ul>
@@ -23,14 +23,6 @@
 <script>
   export default {
     props: {
-      width: {
-        type: Number,
-        required: true
-      },
-      height: {
-        type: Number,
-        required: true
-      },
       bgUrl: {
         type: String,
         required: true
@@ -56,71 +48,103 @@
       return {
         widthRatio: 1,//缩放比
         heightRatio: 1,//缩放比
-        step: 1
+        width: 0,
+        height: 0,
+        step: 1,
+        timer: 0
       }
     },
     methods: {
+      main () {
+        this.setBg()
+      },
       setBg () {
+        let componentBox = document.querySelector(`#${this.id}`)
+
         //获取当前背景的宽高
         let currentBg = document.querySelector(`#${this.id} .yi-ad-preview-bg`)
-        let currentBgImg = document.querySelector(`#${this.id} .yi-ad-preview-bg > img`)           
-        this.widthRatio =  this.width / currentBgImg.naturalWidth
-        this.heightRatio =  this.height / currentBgImg.naturalHeight
+        let currentBgImg = document.querySelector(`#${this.id} .yi-ad-preview-bg > img`)
 
-        if (this.widthRatio <= this.heightRatio) {
-          currentBg.style.width = currentBgImg.naturalWidth * this.widthRatio + 'px'
-          currentBg.style.height = currentBgImg.naturalHeight * this.widthRatio + 'px'
-          currentBgImg.width= currentBgImg.naturalWidth * this.widthRatio
-          currentBgImg.height = currentBgImg.naturalHeight * this.widthRatio
-        } else {
-          currentBg.style.width = currentBgImg.naturalWidth * this.heightRatio + 'px'
-          currentBg.style.height = currentBgImg.naturalHeight * this.heightRatio + 'px'
-          currentBgImg.width  = currentBgImg.naturalWidth * this.heightRatio
-          currentBgImg.height = currentBgImg.naturalHeight * this.heightRatio
-        }
+        this.loadImageAsync(this.bgUrl).then(() => {
+          this.width = componentBox.offsetWidth
+          this.height = componentBox.offsetHeight || parseInt(currentBgImg.naturalHeight / currentBgImg.naturalWidth * this.width)
+          this.widthRatio =  this.width / currentBgImg.naturalWidth
+          this.heightRatio =  this.height / currentBgImg.naturalHeight
+          if (this.widthRatio <= this.heightRatio) {
+            currentBg.style.width = parseInt(currentBgImg.naturalWidth * this.widthRatio) + 'px'
+            currentBg.style.height = parseInt(currentBgImg.naturalHeight * this.widthRatio) + 'px'
+            currentBgImg.width= parseInt(currentBgImg.naturalWidth * this.widthRatio)
+            currentBgImg.height = parseInt(currentBgImg.naturalHeight * this.widthRatio)
+          } else {
+            currentBg.style.width = parseInt(currentBgImg.naturalWidth * this.heightRatio) + 'px'
+            currentBg.style.height = parseInt(currentBgImg.naturalHeight * this.heightRatio) + 'px'
+            currentBgImg.width  = parseInt(currentBgImg.naturalWidth * this.heightRatio)
+            currentBgImg.height = parseInt(currentBgImg.naturalHeight * this.heightRatio)
+          }
+          //设置主题
+          this.setTheme()
+        })
       },
       setTheme () {
         let currentBg = document.querySelector(`#${this.id} .yi-ad-preview-bg`)
+        let theme = document.querySelector(`#${this.id} .yi-ad-preview-theme`)
         //获取当前 bg 的宽高
         let {w: currentBgWidth, h: currentBgHeight} = this.getElementAttr(currentBg)
-        let theme = document.querySelector(`#${this.id} .yi-ad-preview-theme`)
-        theme.style.width = currentBgWidth * Number(this.theme.width) + 'px'
-        theme.style.height = currentBgHeight * Number(this.theme.height) + 'px'
 
-        theme.style.top = currentBgHeight * Number(this.theme.top) + 'px'
-        theme.style.right = currentBgWidth * Number(this.theme.right) + 'px'
-        theme.style.bottom = currentBgHeight * Number(this.theme.bottom) + 'px'
-        theme.style.left = currentBgWidth * Number(this.theme.left) + 'px'
+        theme.style.width = parseInt(currentBgWidth * Number(this.themeNow.width)) + 'px'
+        theme.style.height = parseInt(currentBgHeight * Number(this.themeNow.height)) + 'px'
+
+        theme.style.top = parseInt(currentBgHeight * Number(this.themeNow.top)) + 'px'
+        theme.style.right = parseInt(currentBgWidth * Number(this.themeNow.right)) + 'px'
+        theme.style.bottom = parseInt(currentBgHeight * Number(this.themeNow.bottom)) + 'px'
+        theme.style.left = parseInt(currentBgWidth * Number(this.themeNow.left)) + 'px'
+        
+        //设置资源
+        this.setResource()
       },
       setResource () {
         let theme = document.querySelector(`#${this.id} .yi-ad-preview-theme`)
         let resource = document.querySelectorAll(`#${this.id} .yi-ad-preview-resource`)
         let resourceImg = document.querySelectorAll(`#${this.id} .yi-ad-preview-resource > img`)
-        let {w: themeWidth, h: themeHeight} = this.getElementAttr(theme)
 
-        this.resourceList.forEach((item, index) => {
-
-          resource[index].style.width = themeWidth * Number(item.width) + 'px'
-          resource[index].style.height = themeHeight * Number(item.height) + 'px'
-          resource[index].style.top = themeHeight * Number(item.y) + 'px'
-          resource[index].style.left = themeWidth * Number(item.x) + 'px'
-
-          let resourceWidth = themeWidth * Number(item.width)
-          let resourceHeight = themeHeight * Number(item.height)
-
-          this.widthRatio =  resourceWidth / resourceImg[index].naturalWidth
-          this.heightRatio =  resourceHeight / resourceImg[index].naturalHeight
-
-          //矫正
-          if (this.widthRatio <= this.heightRatio) {
-            resource[index].style.width = resourceWidth + 'px'
-            resource[index].style.height = resourceImg[index].naturalHeight * this.widthRatio + 'px'
-          } else {
-            resource[index].style.width = resourceImg[index].naturalWidth * this.heightRatio + 'px'
-            resource[index].style.height = resourceHeight + 'px'
+        const promises = this.resourceListNow.map(res => {
+          if (res.url) {
+            return this.loadImageAsync(res.url)
           }
-          //暂时隐藏所有的资源
-          resource[index].style.display = 'none'
+        })
+       
+        Promise.all(promises).then(posts => {
+          let {w: themeWidth, h: themeHeight} = this.getElementAttr(theme)
+          this.resourceListNow.forEach((item, index) => {
+            if (!item.url) {
+              return
+            }
+            resource[index].style.width = parseInt(themeWidth * Number(item.width)) + 'px'
+            resource[index].style.height = parseInt(themeHeight * Number(item.height)) + 'px'
+            resource[index].style.top = parseInt(themeHeight * Number(item.y)) + 'px'
+            resource[index].style.left = parseInt(themeWidth * Number(item.x)) + 'px'
+
+            let resourceWidth = themeWidth * Number(item.width)
+            let resourceHeight = themeHeight * Number(item.height)
+
+            this.widthRatio =  resourceWidth / resourceImg[index].naturalWidth
+            this.heightRatio =  resourceHeight / resourceImg[index].naturalHeight
+
+            //矫正
+            if (this.widthRatio <= this.heightRatio) {
+              resource[index].style.width = parseInt(resourceWidth) + 'px'
+              resource[index].style.height = parseInt(resourceImg[index].naturalHeight * this.widthRatio) + 'px'
+            } else {
+              resource[index].style.width = parseInt(resourceImg[index].naturalWidth * this.heightRatio) + 'px'
+              resource[index].style.height = parseInt(resourceHeight) + 'px'
+            }
+            //暂时隐藏所有的资源
+            resource[index].style.display = 'none'
+          })
+          //执行动画
+          this.animate()
+        }).catch(function(reason){
+          console.log(reason)
         })
       },
       getElementAttr (el) {
@@ -131,6 +155,20 @@
         let b = Number(el.style.bottom.replace('px', ''))
         let l = Number(el.style.left.replace('px', ''))
         return {w, h, t, r, b, l} 
+      },
+      loadImageAsync (url) {
+        return new Promise((resolve, reject) => {
+          const image = new Image()
+
+          image.onload = function() {
+            resolve(image)
+          }
+
+          image.onerror = function() {
+            reject(new Error('Could not load image at ' + url))
+          }
+          image.src = url
+        })
       },
       animate () {
         let bg = document.querySelector(`#${this.id} .yi-ad-preview-bg`)
@@ -147,7 +185,7 @@
         } = this.getElementAttr(theme)
         let resource = document.querySelectorAll(`#${this.id} .yi-ad-preview-resource`)
 
-        this.resourceList.forEach((item, index) => {
+        this.resourceListNow.forEach((item, index) => {
           //获取当前资源的宽高
           let {
             w: resourceWidth, 
@@ -171,7 +209,7 @@
                 item.startPosition = -resourceHeight
                 //运动结束位置 = 之前定位的位置
                 item.stopPosition = item.originalPosition
-                resource[index].style.top = item.startPosition + 'px'
+                resource[index].style.top = parseInt(item.startPosition) + 'px'
                 
                 // resource[index].style.bottom = item.stopPosition + 'px'
 
@@ -199,7 +237,7 @@
                 item.startPosition = -resourceWidth
                 //运动结束位置 = 主题的高宽度 - 资源的宽度 - 资源的宽度
                 item.stopPosition = themeWidth - resourceLeft - resourceWidth
-                resource[index].style.right = item.startPosition + 'px'
+                resource[index].style.right = parseInt(item.startPosition) + 'px'
                 
                 // resource[index].style.bottom = item.stopPosition + 'px'
 
@@ -227,10 +265,9 @@
                 item.startPosition = -resourceHeight
                 //运动结束位置 = 主题的高度 - 资源的高度 - 资源的 top
                 item.stopPosition = themeHeight - resourceTop - resourceHeight
-                resource[index].style.bottom = item.startPosition + 'px'
-                
-                // resource[index].style.bottom = item.stopPosition + 'px'
 
+                resource[index].style.bottom = parseInt(item.startPosition) + 'px'
+                
                 item.unitTime = (item.duration * 1000 * this.step) / Math.abs(item.stopPosition - item.startPosition)  
 
                 item.timer = setInterval(() => {
@@ -255,7 +292,7 @@
                 item.startPosition = -resourceWidth
                 //运动结束位置 = 之前定位的位置
                 item.stopPosition = item.originalPosition
-                resource[index].style.left = item.startPosition + 'px'
+                resource[index].style.left = parseInt(item.startPosition) + 'px'
                 
                 // resource[index].style.bottom = item.stopPosition + 'px'
 
@@ -275,14 +312,39 @@
         })
       }
     },
+    watch: {
+      resourceList () {
+        return this.main()
+      },
+      theme () {
+        return this.main()
+      }
+    },
+    computed: {
+      resourceListNow () {
+        return JSON.parse(JSON.stringify(this.resourceList))
+      },
+      themeNow () {
+        return JSON.parse(JSON.stringify(this.theme))
+      }
+    },
     mounted () {
-      setTimeout(() => {
-        this.setBg()
-        this.setTheme()
-        this.setResource()
-        this.animate()
-      }, 10)
-      
+      this.main()     
+    },
+    created () {
+      let onresize = window.onresize
+      window.onresize = () => {
+        clearTimeout(this.timer)
+        this.resourceListNow.forEach((item, index) => {
+          clearTimeout(item.timerDelay)
+        })
+        this.timer = setTimeout(() => {
+          this.main()
+        }, 100)
+        if (onresize) {
+          onresize()
+        }
+      }
     }
   }
 </script>
@@ -307,6 +369,7 @@
       }
       .yi-ad-preview-theme {
         position: absolute;
+        overflow: hidden;
         width: 100%;
         height: 100%;
         // background-color: yellow;
