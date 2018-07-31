@@ -60,7 +60,7 @@
       },
       setBg () {
         let componentBox = document.querySelector(`#${this.id}`)
-
+        if (!componentBox) return 
         //获取当前背景的宽高
         let currentBg = document.querySelector(`#${this.id} .yi-ad-preview-bg`)
         let currentBgImg = document.querySelector(`#${this.id} .yi-ad-preview-bg > img`)
