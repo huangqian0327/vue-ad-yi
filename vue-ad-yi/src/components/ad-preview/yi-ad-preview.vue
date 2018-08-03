@@ -8,7 +8,7 @@
     }">
     <div 
       class="yi-ad-preview-bg">
-      <img v-if="bgUrl" :src="bgUrl" alt="">
+      <img class="bgImg" v-if="bgUrl" :src="bgUrl" alt="">
       <div class="yi-ad-preview-theme">
         <ul>
           <li v-if="resourceListNow" v-for="item in resourceListNow" class="yi-ad-preview-resource">
@@ -51,12 +51,16 @@
         width: 0,
         height: 0,
         step: 1,
-        timer: 0
+        timer: 0,
+        originalComponetWidth: null,
+        originalComponetHeight: null
       }
     },
     methods: {
       main () {
-        this.setBg()
+        this.$nextTick(() => {
+          this.setBg()
+        })
       },
       setBg () {
         let componentBox = document.querySelector(`#${this.id}`)
@@ -65,22 +69,30 @@
         let currentBg = document.querySelector(`#${this.id} .yi-ad-preview-bg`)
         let currentBgImg = document.querySelector(`#${this.id} .yi-ad-preview-bg > img`)
 
+        this.width = componentBox.offsetWidth
+        
         this.loadImageAsync(this.bgUrl).then(() => {
-          this.width = componentBox.offsetWidth
-          this.height = componentBox.offsetHeight || parseInt(currentBgImg.naturalHeight / currentBgImg.naturalWidth * this.width)
+          if (this.originalComponetHeight == null) {
+            this.height = componentBox.offsetHeight || Math.round(currentBgImg.naturalHeight / currentBgImg.naturalWidth * this.width)
+            this.originalComponetHeight = componentBox.offsetHeight
+          } else {
+            this.height = this.originalComponetHeight || Math.round(currentBgImg.naturalHeight / currentBgImg.naturalWidth * this.width)
+          }
+
           this.widthRatio =  this.width / currentBgImg.naturalWidth
           this.heightRatio =  this.height / currentBgImg.naturalHeight
           if (this.widthRatio <= this.heightRatio) {
-            currentBg.style.width = parseInt(currentBgImg.naturalWidth * this.widthRatio) + 'px'
-            currentBg.style.height = parseInt(currentBgImg.naturalHeight * this.widthRatio) + 'px'
-            currentBgImg.width= parseInt(currentBgImg.naturalWidth * this.widthRatio)
-            currentBgImg.height = parseInt(currentBgImg.naturalHeight * this.widthRatio)
+            currentBg.style.width = Math.round(currentBgImg.naturalWidth * this.widthRatio) + 'px'
+            currentBg.style.height = Math.round(currentBgImg.naturalHeight * this.widthRatio) + 'px'
+            currentBgImg.width= Math.round(currentBgImg.naturalWidth * this.widthRatio)
+            currentBgImg.height = Math.round(currentBgImg.naturalHeight * this.widthRatio)
           } else {
-            currentBg.style.width = parseInt(currentBgImg.naturalWidth * this.heightRatio) + 'px'
-            currentBg.style.height = parseInt(currentBgImg.naturalHeight * this.heightRatio) + 'px'
-            currentBgImg.width  = parseInt(currentBgImg.naturalWidth * this.heightRatio)
-            currentBgImg.height = parseInt(currentBgImg.naturalHeight * this.heightRatio)
+            currentBg.style.width = Math.round(currentBgImg.naturalWidth * this.heightRatio) + 'px'
+            currentBg.style.height = Math.round(currentBgImg.naturalHeight * this.heightRatio) + 'px'
+            currentBgImg.width  = Math.round(currentBgImg.naturalWidth * this.heightRatio)
+            currentBgImg.height = Math.round(currentBgImg.naturalHeight * this.heightRatio)
           }
+          currentBgImg.style.visibility = 'visible'
           //设置主题
           this.setTheme()
         })
@@ -91,13 +103,13 @@
         //获取当前 bg 的宽高
         let {w: currentBgWidth, h: currentBgHeight} = this.getElementAttr(currentBg)
 
-        theme.style.width = parseInt(currentBgWidth * Number(this.themeNow.width)) + 'px'
-        theme.style.height = parseInt(currentBgHeight * Number(this.themeNow.height)) + 'px'
+        theme.style.width = Math.round(currentBgWidth * Number(this.themeNow.width)) + 'px'
+        theme.style.height = Math.round(currentBgHeight * Number(this.themeNow.height)) + 'px'
 
-        theme.style.top = parseInt(currentBgHeight * Number(this.themeNow.top)) + 'px'
-        theme.style.right = parseInt(currentBgWidth * Number(this.themeNow.right)) + 'px'
-        theme.style.bottom = parseInt(currentBgHeight * Number(this.themeNow.bottom)) + 'px'
-        theme.style.left = parseInt(currentBgWidth * Number(this.themeNow.left)) + 'px'
+        theme.style.top = Math.round(currentBgHeight * Number(this.themeNow.top)) + 'px'
+        theme.style.right = Math.round(currentBgWidth * Number(this.themeNow.right)) + 'px'
+        theme.style.bottom = Math.round(currentBgHeight * Number(this.themeNow.bottom)) + 'px'
+        theme.style.left = Math.round(currentBgWidth * Number(this.themeNow.left)) + 'px'
         
         //设置资源
         this.setResource()
@@ -119,10 +131,10 @@
             if (!item.url) {
               return
             }
-            resource[index].style.width = parseInt(themeWidth * Number(item.width)) + 'px'
-            resource[index].style.height = parseInt(themeHeight * Number(item.height)) + 'px'
-            resource[index].style.top = parseInt(themeHeight * Number(item.y)) + 'px'
-            resource[index].style.left = parseInt(themeWidth * Number(item.x)) + 'px'
+            resource[index].style.width = Math.round(themeWidth * Number(item.width)) + 'px'
+            resource[index].style.height = Math.round(themeHeight * Number(item.height)) + 'px'
+            resource[index].style.top = Math.round(themeHeight * Number(item.y)) + 'px'
+            resource[index].style.left = Math.round(themeWidth * Number(item.x)) + 'px'
 
             let resourceWidth = themeWidth * Number(item.width)
             let resourceHeight = themeHeight * Number(item.height)
@@ -132,11 +144,11 @@
 
             //矫正
             if (this.widthRatio <= this.heightRatio) {
-              resource[index].style.width = parseInt(resourceWidth) + 'px'
-              resource[index].style.height = parseInt(resourceImg[index].naturalHeight * this.widthRatio) + 'px'
+              resource[index].style.width = Math.round(resourceWidth) + 'px'
+              resource[index].style.height = Math.round(resourceImg[index].naturalHeight * this.widthRatio) + 'px'
             } else {
-              resource[index].style.width = parseInt(resourceImg[index].naturalWidth * this.heightRatio) + 'px'
-              resource[index].style.height = parseInt(resourceHeight) + 'px'
+              resource[index].style.width = Math.round(resourceImg[index].naturalWidth * this.heightRatio) + 'px'
+              resource[index].style.height = Math.round(resourceHeight) + 'px'
             }
             //暂时隐藏所有的资源
             resource[index].style.display = 'none'
@@ -209,14 +221,14 @@
                 item.startPosition = -resourceHeight
                 //运动结束位置 = 之前定位的位置
                 item.stopPosition = item.originalPosition
-                resource[index].style.top = parseInt(item.startPosition) + 'px'
+                resource[index].style.top = Math.round(item.startPosition) + 'px'
                 
                 // resource[index].style.bottom = item.stopPosition + 'px'
 
                 item.unitTime = (item.duration * 1000 * this.step) / Math.abs(item.stopPosition - item.startPosition)  
 
                 item.timer = setInterval(() => {
-                  if (parseInt(resource[index].style.top.replace('px', '')) <= parseInt(item.stopPosition)) {
+                  if (Math.round(resource[index].style.top.replace('px', '')) < Math.round(item.stopPosition)) {
                     resource[index].style.top = Number(resource[index].style.top.replace('px', '')) + this.step + 'px'
                   } else {
                     clearInterval(item.timer)
@@ -237,14 +249,14 @@
                 item.startPosition = -resourceWidth
                 //运动结束位置 = 主题的高宽度 - 资源的宽度 - 资源的宽度
                 item.stopPosition = themeWidth - resourceLeft - resourceWidth
-                resource[index].style.right = parseInt(item.startPosition) + 'px'
+                resource[index].style.right = Math.round(item.startPosition) + 'px'
                 
                 // resource[index].style.bottom = item.stopPosition + 'px'
 
                 item.unitTime = (item.duration * 1000 * this.step) / Math.abs(item.stopPosition - item.startPosition)  
 
                 item.timer = setInterval(() => {
-                  if (parseInt(resource[index].style.right.replace('px', '')) <= parseInt(item.stopPosition)) {    
+                  if (Math.round(resource[index].style.right.replace('px', '')) < Math.round(item.stopPosition)) {    
                     resource[index].style.right = Number(resource[index].style.right.replace('px', '')) + this.step + 'px'
                   } else {
                     clearInterval(item.timer)
@@ -266,12 +278,12 @@
                 //运动结束位置 = 主题的高度 - 资源的高度 - 资源的 top
                 item.stopPosition = themeHeight - resourceTop - resourceHeight
 
-                resource[index].style.bottom = parseInt(item.startPosition) + 'px'
+                resource[index].style.bottom = Math.round(item.startPosition) + 'px'
                 
                 item.unitTime = (item.duration * 1000 * this.step) / Math.abs(item.stopPosition - item.startPosition)  
 
                 item.timer = setInterval(() => {
-                  if (parseInt(resource[index].style.bottom.replace('px', '')) <= parseInt(item.stopPosition)) {
+                  if (Math.round(resource[index].style.bottom.replace('px', '')) < Math.round(item.stopPosition)) {
                     resource[index].style.bottom = Number(resource[index].style.bottom.replace('px', '')) + this.step + 'px'
                   } else {
                     clearInterval(item.timer)
@@ -292,14 +304,14 @@
                 item.startPosition = -resourceWidth
                 //运动结束位置 = 之前定位的位置
                 item.stopPosition = item.originalPosition
-                resource[index].style.left = parseInt(item.startPosition) + 'px'
+                resource[index].style.left = Math.round(item.startPosition) + 'px'
                 
                 // resource[index].style.bottom = item.stopPosition + 'px'
 
                 item.unitTime = (item.duration * 1000 * this.step) / Math.abs(item.stopPosition - item.startPosition)  
 
                 item.timer = setInterval(() => {
-                  if (parseInt(resource[index].style.left.replace('px', '')) <= parseInt(item.stopPosition)) {
+                  if (Math.round(resource[index].style.left.replace('px', '')) < Math.round(item.stopPosition)) {
                     resource[index].style.left = Number(resource[index].style.left.replace('px', '')) + this.step + 'px'
                   } else {
                     clearInterval(item.timer)
@@ -361,10 +373,11 @@
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      img {
+      .bgImg {
         position: absolute;
         left: 50%;
         top: 50%;
+        visibility: hidden;
         transform: translate(-50%, -50%);
       }
       .yi-ad-preview-theme {
@@ -379,9 +392,10 @@
           .yi-ad-preview-resource {
             list-style: none;
             position: absolute;
+            display: none;
             img {
               width: 100%;
-              height: 100%
+              height: 100%;
             }
           }
         } // end ul
