@@ -8,10 +8,10 @@
     }">
     <div 
       class="yi-ad-preview-bg">
-      <img class="bgImg" v-if="bgUrl" :src="bgUrl" alt="">
+      <img class="bgImg" v-if="bgUrl" :src="bgUrl" alt="" width="200" height="200">
       <div class="yi-ad-preview-theme">
         <ul>
-          <li v-if="resourceListNow" v-for="item in resourceListNow" class="yi-ad-preview-resource">
+          <li v-if="resourceListNow" v-for="(item, index) in resourceListNow" :key="index" class="yi-ad-preview-resource">
             <img :src="item.url">
           </li>
         </ul>
@@ -106,6 +106,12 @@
         theme.style.width = Math.round(currentBgWidth * Number(this.themeNow.width)) + 'px'
         theme.style.height = Math.round(currentBgHeight * Number(this.themeNow.height)) + 'px'
 
+        //初始化主题的定位
+        theme.style.top = ""
+        theme.style.right = ""
+        theme.style.bottom = ""
+        theme.style.left = ""
+        
         theme.style.top = Math.round(currentBgHeight * Number(this.themeNow.top)) + 'px'
         theme.style.right = Math.round(currentBgWidth * Number(this.themeNow.right)) + 'px'
         theme.style.bottom = Math.round(currentBgHeight * Number(this.themeNow.bottom)) + 'px'
@@ -121,6 +127,10 @@
 
         const promises = this.resourceListNow.map(res => {
           if (res.url) {
+            let arr = res.url.split('.')
+            if ( arr[arr.length - 1] == 'webp') {
+              res.url += '?imageView2/0/format/png'
+            }
             return this.loadImageAsync(res.url)
           }
         })
@@ -396,6 +406,7 @@
             img {
               width: 100%;
               height: 100%;
+              // position: absolute;
             }
           }
         } // end ul
