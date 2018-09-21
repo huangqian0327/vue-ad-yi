@@ -1,10 +1,11 @@
 <template>
   <div class="test">
-    <span @click="refresh" class="refresh">刷新</span>
+    <span @click="$router.go(-1)" class="btn">返回首页</span>
+    <span @click="refresh" class="btn">刷新</span>
     <div class="container">
       <div class="logo">
         <h2>广告预览logo</h2>
-        <AdPreview 
+        <AdCommonPreview 
           :width="width" 
           :height="height"
           :bgUrl="testObj1.bgUrl"
@@ -17,7 +18,7 @@
       </div>
       <div class="bubble">
         <h2>广告预览bubble</h2>
-        <AdPreview 
+        <AdCommonPreview 
           :width="width" 
           :height="height"
           :bgUrl="testObj2.bgUrl"
@@ -34,11 +35,11 @@
 
 <script>
   // import YiAdPreview from '@/components/ad-preview/yi-ad-preview'
-  import {AdPreview} from '@/components/index.js'
+  import { AdCommonPreview } from '@/components/index.js'
   export default {
     name: 'App',
     components: {
-      AdPreview
+      AdCommonPreview
     },
     inject: ['reload'],
     data () {
@@ -116,7 +117,7 @@
               animation: 'left',
               duration: 1,
               delay: 0,
-              url: 'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-07-20/58842_2.png'            
+              url: 'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-08-09/60749_92584304.webp'            
             }
           ]
         },
@@ -140,7 +141,7 @@
   .test {
     width: 100%;
   }
-  .test .refresh {
+  .test .btn {
     display: block;
     width: 100px;
     height: 50px;

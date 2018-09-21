@@ -11,7 +11,7 @@
       <img class="bgImg" v-if="bgUrl" :src="bgUrl" alt="" width="200" height="200">
       <div class="yi-ad-preview-theme">
         <ul>
-          <li v-if="resourceListNow" v-for="(item, index) in resourceListNow" :key="index" class="yi-ad-preview-resource">
+          <li v-if="resourceListNow" v-for="(item, index) in resourceListNow" :key="index" class="yi-ad-preview-resource" :style="{backgroundImage: `url(${item.url})`}">
             <img :src="item.url">
           </li>
         </ul>
@@ -403,10 +403,12 @@
             list-style: none;
             position: absolute;
             display: none;
+            background-repeat: no-repeat;
+            background-size: contain;
             img {
               width: 100%;
               height: 100%;
-              // position: absolute;
+              visibility: hidden;
             }
           }
         } // end ul
