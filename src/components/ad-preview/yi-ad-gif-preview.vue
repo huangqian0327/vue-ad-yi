@@ -277,10 +277,10 @@
         }
         
       },
-      previewImg () {
-        let oImg = document.querySelector(`#${this.id} .previewImg`)
-        oImg.style.backgroundImage = `url(${this.resourceContentNow[100].entrance_animation.url}")`
-      },
+      // previewImg () {
+      //   let oImg = document.querySelector(`#${this.id} .previewImg`)
+      //   oImg.style.backgroundImage = `url(${this.resourceContentNow[100].entrance_animation.url}")`
+      // },
       // getRandom () {
       //   return Math.round(Math.random() * 1000000000000)
       // },
@@ -288,8 +288,8 @@
         let entranceGif = document.querySelector(`#${this.id} #entrance-gif`)
         let displayGif = document.querySelector(`#${this.id} #display-gif`)
 
-        this.entranceImg = this.resourceContentNow[100].entrance_animation
-        this.displayImg = this.resourceContentNow[100].display_animation
+        this.entranceImg = this.resourceContentNow[50].entrance_animation
+        this.displayImg = this.resourceContentNow[50].display_animation
 
         entranceGif.setAttribute('rel_animated_src', this.entranceImg.url)
         displayGif.setAttribute('rel_animated_src', this.displayImg.url)
