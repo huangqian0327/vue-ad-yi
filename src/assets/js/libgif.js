@@ -463,10 +463,10 @@
         var loopDelay = (options.hasOwnProperty('loop_delay') ? options.loop_delay : 0);
         var overrideLoopMode = (options.hasOwnProperty('loop_mode') ? options.loop_mode : 'auto');
         var drawWhileLoading = (options.hasOwnProperty('draw_while_loading') ? options.draw_while_loading : true);
-        // var showProgressBar = drawWhileLoading ? (options.hasOwnProperty('show_progress_bar') ? options.show_progress_bar : true) : false;
-        // var progressBarHeight = (options.hasOwnProperty('progressbar_height') ? options.progressbar_height : 25);
-        // var progressBarBackgroundColor = (options.hasOwnProperty('progressbar_background_color') ? options.progressbar_background_color : 'rgba(255,255,255,0.4)');
-        // var progressBarForegroundColor = (options.hasOwnProperty('progressbar_foreground_color') ? options.progressbar_foreground_color : 'rgba(255,0,22,.8)');
+        var showProgressBar = drawWhileLoading ? (options.hasOwnProperty('show_progress_bar') ? options.show_progress_bar : true) : false;
+        var progressBarHeight = (options.hasOwnProperty('progressbar_height') ? options.progressbar_height : 25);
+        var progressBarBackgroundColor = (options.hasOwnProperty('progressbar_background_color') ? options.progressbar_background_color : 'rgba(255,255,255,0.4)');
+        var progressBarForegroundColor = (options.hasOwnProperty('progressbar_foreground_color') ? options.progressbar_foreground_color : 'rgba(255,0,22,.8)');
 
         var clear = function () {
             transparency = null;
@@ -517,51 +517,51 @@
             }
         };
 
-        // var doShowProgress = function (pos, length, draw) {
-        //     if (draw && showProgressBar) {
-        //         var height = progressBarHeight;
-        //         var left, mid, top, width;
-        //         if (options.is_vp) {
-        //             if (!ctx_scaled) {
-        //                 top = (options.vp_t + options.vp_h - height);
-        //                 height = height;
-        //                 left = options.vp_l;
-        //                 mid = left + (pos / length) * options.vp_w;
-        //                 width = canvas.width;
-        //             } else {
-        //                 top = (options.vp_t + options.vp_h - height) / get_canvas_scale();
-        //                 height = height / get_canvas_scale();
-        //                 left = (options.vp_l / get_canvas_scale() );
-        //                 mid = left + (pos / length) * (options.vp_w / get_canvas_scale());
-        //                 width = canvas.width / get_canvas_scale();
-        //             }
-        //             //some debugging, draw rect around viewport
-        //             if (false) {
-        //                 if (!ctx_scaled) {
-        //                     var l = options.vp_l, t = options.vp_t;
-        //                     var w = options.vp_w, h = options.vp_h;
-        //                 } else {
-        //                     var l = options.vp_l/get_canvas_scale(), t = options.vp_t/get_canvas_scale();
-        //                     var w = options.vp_w/get_canvas_scale(), h = options.vp_h/get_canvas_scale();
-        //                 }
-        //                 ctx.rect(l,t,w,h);
-        //                 ctx.stroke();
-        //             }
-        //         }
-        //         else {
-        //             top = (canvas.height - height) / (ctx_scaled ? get_canvas_scale() : 1);
-        //             mid = ((pos / length) * canvas.width) / (ctx_scaled ? get_canvas_scale() : 1);
-        //             width = canvas.width / (ctx_scaled ? get_canvas_scale() : 1 );
-        //             height /= ctx_scaled ? get_canvas_scale() : 1;
-        //         }
+        var doShowProgress = function (pos, length, draw) {
+            if (draw && showProgressBar) {
+                var height = progressBarHeight;
+                var left, mid, top, width;
+                if (options.is_vp) {
+                    if (!ctx_scaled) {
+                        top = (options.vp_t + options.vp_h - height);
+                        height = height;
+                        left = options.vp_l;
+                        mid = left + (pos / length) * options.vp_w;
+                        width = canvas.width;
+                    } else {
+                        top = (options.vp_t + options.vp_h - height) / get_canvas_scale();
+                        height = height / get_canvas_scale();
+                        left = (options.vp_l / get_canvas_scale() );
+                        mid = left + (pos / length) * (options.vp_w / get_canvas_scale());
+                        width = canvas.width / get_canvas_scale();
+                    }
+                    //some debugging, draw rect around viewport
+                    if (false) {
+                        if (!ctx_scaled) {
+                            var l = options.vp_l, t = options.vp_t;
+                            var w = options.vp_w, h = options.vp_h;
+                        } else {
+                            var l = options.vp_l/get_canvas_scale(), t = options.vp_t/get_canvas_scale();
+                            var w = options.vp_w/get_canvas_scale(), h = options.vp_h/get_canvas_scale();
+                        }
+                        ctx.rect(l,t,w,h);
+                        ctx.stroke();
+                    }
+                }
+                else {
+                    top = (canvas.height - height) / (ctx_scaled ? get_canvas_scale() : 1);
+                    mid = ((pos / length) * canvas.width) / (ctx_scaled ? get_canvas_scale() : 1);
+                    width = canvas.width / (ctx_scaled ? get_canvas_scale() : 1 );
+                    height /= ctx_scaled ? get_canvas_scale() : 1;
+                }
 
-        //         ctx.fillStyle = progressBarBackgroundColor;
-        //         ctx.fillRect(mid, top, width - mid, height);
+                ctx.fillStyle = progressBarBackgroundColor;
+                ctx.fillRect(mid, top, width - mid, height);
 
-        //         ctx.fillStyle = progressBarForegroundColor;
-        //         ctx.fillRect(0, top, mid, height);
-        //     }
-        // };
+                ctx.fillStyle = progressBarForegroundColor;
+                ctx.fillRect(0, top, mid, height);
+            }
+        };
 
         var doLoadError = function (originOfError) {
             var drawError = function () {
@@ -920,11 +920,12 @@
             get_canvas       : function() { return canvas },
             get_canvas_scale : function() { return get_canvas_scale() },
             get_loading      : function() { return loading },
-            // get_auto_play    : function() { return options.auto_play },
+            get_auto_play    : function() { return options.auto_play },
             get_length       : function() { return player.length() },
-            // get_current_frame: function() { return player.current_frame() },
+            get_current_frame: function() { return player.current_frame() },
             load_url: function(src,callback){
                 if (!load_setup(callback)) return;
+
                 var h = new XMLHttpRequest();
                 // new browsers (XMLHttpRequest2-compliant)
                 h.open('GET', src, true);
@@ -963,22 +964,22 @@
                     stream = new Stream(data);
                     setTimeout(doParse, 0);
                 };
-                // h.onprogress = function (e) {
-                //     if (e.lengthComputable) doShowProgress(e.loaded, e.total, true);
-                // };
+                h.onprogress = function (e) {
+                    if (e.lengthComputable) doShowProgress(e.loaded, e.total, true);
+                };
                 h.onerror = function() { doLoadError('xhr'); };
                 h.send();
             },
             load: function (callback) {
-                this.load_url(gif.getAttribute('rel_animated_src') || gif.src, callback);
+                this.load_url(gif.getAttribute('rel_animated_src') || gif.src,callback);
             },
-            // load_raw: function(arr, callback) {
-            //     if (!load_setup(callback)) return;
-            //     if (!initialized) init();
-            //     stream = new Stream(arr);
-            //     setTimeout(doParse, 0);
-            // },
-            // set_frame_offset: setFrameOffset
+            load_raw: function(arr, callback) {
+                if (!load_setup(callback)) return;
+                if (!initialized) init();
+                stream = new Stream(arr);
+                setTimeout(doParse, 0);
+            },
+            set_frame_offset: setFrameOffset
         };
     };
 

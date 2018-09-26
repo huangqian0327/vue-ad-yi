@@ -198,6 +198,7 @@
                 }
               })
               sup1.load(() => {
+                console.log('gif1 is loaded')
                 //隐藏静态图
                 document.querySelector(`#${this.id} #mask`) ? document.querySelector(`#${this.id} #mask`).style.display = 'none' : ''
                 //显示第一张
@@ -220,7 +221,7 @@
                 }
               })
               sup1.load(() => {
-                //隐藏静态图
+                // //隐藏静态图
                 document.querySelector(`#${this.id} #mask`) ? document.querySelector(`#${this.id} #mask`).style.display = 'none' : ''
                 //显示第一张
                 document.querySelector(`#${this.id} .entranceBox`) ? document.querySelector(`#${this.id} .entranceBox`).style.display = 'block' : ''
@@ -281,11 +282,11 @@
       },
       previewImg () {
         let oImg = document.querySelector(`#${this.id} .previewImg`)
-        oImg.style.backgroundImage = `url(${this.resourceContentNow[100].entrance_animation.url}?${this.getRandom()}")`
+        oImg.style.backgroundImage = `url(${this.resourceContentNow[100].entrance_animation.url}")`
       },
-      getRandom () {
-        return Math.round(Math.random() * 1000000000000)
-      },
+      // getRandom () {
+      //   return Math.round(Math.random() * 1000000000000)
+      // },
       setResource () {
         let entranceGif = document.querySelector(`#${this.id} #entrance-gif`)
         let displayGif = document.querySelector(`#${this.id} #display-gif`)
@@ -293,22 +294,19 @@
         this.entranceImg = this.resourceContentNow[100].entrance_animation
         this.displayImg = this.resourceContentNow[100].display_animation
 
-        entranceGif.setAttribute('rel_animated_src', this.entranceImg.url + '?' + this.getRandom(0))
-        displayGif.setAttribute('rel_animated_src', this.displayImg.url + '?' + this.getRandom(0))
+        entranceGif.setAttribute('rel_animated_src', this.entranceImg.url)
+        displayGif.setAttribute('rel_animated_src', this.displayImg.url)
 
         this.display()      
       },
       setNoGifResPosition () {
-        let oImgBox = document.querySelector(`#${this.id} .displayBox`) || document.querySelector(`#${this.id} .entranceBox`),
-            oImgBoxWidth, 
-            oImgBoxHeight,
+        let oImgBox = document.querySelector(`#${this.id} .entranceBox`),
+            oImgBoxWidth = oImgBox.offsetWidth, 
+            oImgBoxHeight = oImgBox.offsetHeight,
             oImg1 = document.querySelector(`#${this.id} .displayBox > img`),
             oImg2 = document.querySelector(`#${this.id} .entranceBox > img`),
             oImgWidth,
             oImgHeight
-
-        oImgBox ? oImgBoxWidth = oImgBox.offsetWidth : ''
-        oImgBox ? oImgBoxHeight = oImgBox.offsetHeight : ''
 
         oImgWidth = oImg1 ? oImg1.offsetWidth : (oImg2 ? oImg2.offsetWidth : '')
         oImgHeight = oImg1 ? oImg1.offsetHeight : (oImg2 ? oImg2.offsetHeight : '')
@@ -412,15 +410,18 @@
           font-size: 13px;
           color: #fff;
           box-sizing: border-box;
+          position: absolute;
+           top: -11%;
+           width: 100%;
+           height: 10%;
           > div {
             width: 10%;
-            height: 10%;
+            height: 100%;
             background-position: center;
             background-size: contain;
             background-repeat: no-repeat;
             z-index: 99999;
             position: absolute;
-            top: -12%;
             &.adFont {
               cursor: auto;
               background-image: url('../../assets/ad.png');

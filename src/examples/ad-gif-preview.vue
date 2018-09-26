@@ -5,7 +5,7 @@
     <div class="container">
       <div class="logo">
         <h2>广告预览gif1</h2>
-        <AdPreview 
+        <!-- <AdPreview 
           :width="width" 
           :height="height"
           :bgUrl="testObj.bgUrl"
@@ -16,7 +16,7 @@
           resourceImageUrl="jobs"
           id="logo1"
           class="ad-preview"
-          :style="{width: this.width, height: this.height}"/>
+          :style="{width: this.width, height: this.height}"/> -->
       </div>
       <div class="bubble">
         <h2>广告预览gif2</h2>
@@ -93,7 +93,7 @@
           resourceContent:{
             100: {
               entrance_animation:{
-                url: 'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-09-14/37689_animation.gif',
+                url: 'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-09-21/87675_animation.gif',
                 // url:'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-09-17/91453_webp_animation.webp',
                 format: 'gif',
                 // format: 'webp',
