@@ -118,9 +118,7 @@
         let {w: currentBgWidth, h: currentBgHeight} = this.getElementAttr(currentBg)
         if (theme) {
           theme.style.width = Math.round(currentBgWidth * Number(this.themeNow.width)) + 'px'
-          // theme.style.height = Math.round(currentBgHeight * Number(this.themeNow.height)) + 'px'
           theme.style.height = Math.round(currentBgHeight * Number(this.themeNow.height)) + 'px'
-
           //初始化主题的定位
           theme.style.top = ""
           theme.style.right = ""
@@ -198,7 +196,6 @@
                 }
               })
               sup1.load(() => {
-                console.log('gif1 is loaded')
                 //隐藏静态图
                 document.querySelector(`#${this.id} #mask`) ? document.querySelector(`#${this.id} #mask`).style.display = 'none' : ''
                 //显示第一张
@@ -369,15 +366,11 @@
       }
     },
     created () {
-      let onresize = window.onresize
       window.onresize = () => {
         clearTimeout(this.timer)
         this.timer = setTimeout(() => {
           this.main()
         }, 100)
-        if (onresize) {
-          onresize()
-        }
       }
     }
   }
