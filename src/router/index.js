@@ -4,6 +4,7 @@ import Index from '@/examples/index'
 import AdcommonPreview from '@/examples/ad-preview'
 import TimeRange from '@/examples/time-range'
 import AdPreview from '@/examples/ad-gif-preview.vue'
+import DragView from '@/examples/drag-view.vue'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/adPreview',
       name: 'adPreview',
       component: AdPreview
+    },
+    {
+      path: '/dragView',
+      name: 'dragView',
+      component: DragView
     }
   ]
 })

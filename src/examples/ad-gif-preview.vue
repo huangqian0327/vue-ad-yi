@@ -5,7 +5,7 @@
     <div class="container">
       <div class="logo">
         <h2>广告预览gif1</h2>
-        <!-- <AdPreview 
+        <AdPreview 
           :width="width" 
           :height="height"
           :bgUrl="testObj.bgUrl"
@@ -16,7 +16,7 @@
           resourceImageUrl="jobs"
           id="logo1"
           class="ad-preview"
-          :style="{width: this.width, height: this.height}"/> -->
+          :style="{width: this.width, height: this.height}"/>
       </div>
       <div class="bubble">
         <h2>广告预览gif2</h2>
@@ -61,7 +61,7 @@
             show_close_flag: true,
           },
           resourceContent:{
-            100: {
+            50: {
               entrance_animation:{
                 url: 'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-09-14/37689_animation.gif',
                 // url:'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-09-17/91453_webp_animation.webp',
@@ -83,17 +83,18 @@
           type: 'logo',
           bgUrl: 'https://dummyimage.com/1920x1080/99D9EA/fff',
           theme: {
-            width: 0.5,
+            width: 0.2,
             height: 0.5,
             left: 0.01,
             bottom: 0.1,
             show_ad_flag: true,
-            show_close_flag: false,
+            show_close_flag: true,
           },
           resourceContent:{
-            100: {
+            50: {
               entrance_animation:{
-                url: 'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-09-21/87675_animation.gif',
+                // url: 'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-09-21/87675_animation.gif',
+                url: 'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-09-27/19052_animation.gif',
                 // url:'http://otl6ypoog.bkt.clouddn.com/Objectstoarge/images/2018-09-17/91453_webp_animation.webp',
                 format: 'gif',
                 // format: 'webp',

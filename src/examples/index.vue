@@ -23,6 +23,10 @@
         {
           routerTo: 'adPreview',
           label: '广告预览GIF'
+        },
+        {
+          routerTo: 'dragView',
+          label: '可拖动视窗'
         }]
       }
     }

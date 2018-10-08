@@ -66,15 +66,19 @@
         heightRatio: 1,//缩放比
         width: 0,
         height: 0,
-        entranceImg: '',
-        displayImg: ''
+        entranceImg: null,
+        displayImg: null
       }
     },
     methods: {
       main () {
         this.$nextTick(() => {
           this.setBg()
+          if (!this.isList) {
+            this.setResource()
+          }
         })
+        
       },
       setBg () {
         let componentBox = document.querySelector(`#${this.id}`)
@@ -130,6 +134,7 @@
           theme.style.bottom = Math.round(currentBgHeight * Number(this.themeNow.bottom)) + 'px'
           theme.style.left = Math.round(currentBgWidth * Number(this.themeNow.left)) + 'px'
         }
+        this.setResource()
       },
       getElementAttr (el) {
         let w = Number(el ? el.style.width.replace('px', '') : 0)
@@ -157,14 +162,14 @@
       isGif (format) {
         return format.toLowerCase() == 'gif'
       },
-      display () {     
+      display () {   
         try {
           if (this.entranceImg.url == undefined) {
             if (this.displayImg.url == undefined) { // null -> null
-              console.log('null -> null')
-              console.log('参数错误')
+              // console.log('null -> null')
+              // console.log('参数错误')
             } else if (this.isGif(this.displayImg.format)) { //null -> gif
-              console.log('null -> gif')
+              // console.log('null -> gif')
               let sup2 = new SuperGif({ 
                 gif: document.querySelector(`#${this.id} #display-gif`), 
               })
@@ -177,7 +182,7 @@
                 this.setGifResPosition()
               })
             } else { // null -> noGif 
-              console.log('null -> noGif')
+              // console.log('null -> noGif')
               //隐藏静态图
               document.querySelector(`#${this.id} #mask`) ? document.querySelector(`#${this.id} #mask`).style.display = 'none' : ''
               //显示第二张
@@ -187,7 +192,7 @@
             }
           } else if (this.isGif(this.entranceImg.format)) {
             if (this.displayImg.url == undefined) { // gif -> null
-              console.log('gif -> null')
+              // console.log('gif -> null')
               let sup1 = new SuperGif({ 
                 gif: document.querySelector(`#${this.id} #entrance-gif`), 
                 on_end: () => {
@@ -204,7 +209,7 @@
                 this.setGifResPosition()
               })
             } else { // gif -> noGif
-              console.log('gif -> noGif')
+              // console.log('gif -> noGif')
               let sup1 = new SuperGif({ 
                 gif: document.querySelector(`#${this.id} #entrance-gif`), 
                 on_end: () => {
@@ -228,7 +233,7 @@
             } 
           } else if (!this.isGif(this.entranceImg.format)) {
             if (this.displayImg.url == undefined) { //noGif -> null
-              console.log('noGif -> null')
+              // console.log('noGif -> null')
               //隐藏静态图
               document.querySelector(`#${this.id} #mask`) ? document.querySelector(`#${this.id} #mask`).style.display = 'none' : ''
               //显示第一张
@@ -236,7 +241,7 @@
               document.querySelector(`#${this.id} .entranceBox > img`).src = this.entranceImg.url
               this.setNoGifResPosition()
             } else if (this.isGif(this.displayImg.format)) {  //noGif -> Gif
-              console.log('noGif -> Gif')
+              // console.log('noGif -> Gif')
               let sup2 = new SuperGif({ 
                 gif: document.querySelector(`#${this.id} #display-gif`),
               })
@@ -273,7 +278,7 @@
             }
           }
         } catch (err) {
-          console.log(err)
+          // console.log(err)
         }
         
       },
@@ -288,25 +293,31 @@
         let entranceGif = document.querySelector(`#${this.id} #entrance-gif`)
         let displayGif = document.querySelector(`#${this.id} #display-gif`)
 
-        this.entranceImg = this.resourceContentNow[50].entrance_animation
-        this.displayImg = this.resourceContentNow[50].display_animation
+        if (this.resourceContentNow) {
+          if (this.resourceContentNow.pre_animation) {
+            this.entranceImg = this.resourceContentNow.pre_animation.entrance_animation
+            this.displayImg = this.resourceContentNow.pre_animation.display_animation
+          } else {
+            this.entranceImg = this.resourceContentNow[50].entrance_animation
+            this.displayImg = this.resourceContentNow[50].display_animation
+          }
+        }
 
-        entranceGif.setAttribute('rel_animated_src', this.entranceImg.url)
-        displayGif.setAttribute('rel_animated_src', this.displayImg.url)
-
+        if (entranceGif && displayGif) {
+          entranceGif.setAttribute('rel_animated_src', this.entranceImg.url)
+          displayGif.setAttribute('rel_animated_src', this.displayImg.url)
+        }
         this.display()      
       },
       setNoGifResPosition () {
-        let oImgBox = document.querySelector(`#${this.id} .entranceBox`),
-            oImgBoxWidth = oImgBox.offsetWidth, 
-            oImgBoxHeight = oImgBox.offsetHeight,
-            oImg1 = document.querySelector(`#${this.id} .displayBox > img`),
-            oImg2 = document.querySelector(`#${this.id} .entranceBox > img`),
-            oImgWidth,
-            oImgHeight
-
-        oImgWidth = oImg1 ? oImg1.offsetWidth : (oImg2 ? oImg2.offsetWidth : '')
-        oImgHeight = oImg1 ? oImg1.offsetHeight : (oImg2 ? oImg2.offsetHeight : '')
+        let oImgBox = document.querySelector(`#${this.id} .entranceBox`)
+        let oImgBoxWidth = oImgBox.offsetWidth
+        let oImgBoxHeight = oImgBox.offsetHeight
+        let oImg1 = document.querySelector(`#${this.id} .displayBox > img`)
+        let oImg2 = document.querySelector(`#${this.id} .entranceBox > img`)
+        
+        let oImgWidth = oImg1 ? oImg1.offsetWidth : (oImg2 ? oImg2.offsetWidth : '')
+        let oImgHeight = oImg1 ? oImg1.offsetHeight : (oImg2 ? oImg2.offsetHeight : '')
 
         if (oImgBoxWidth / oImgBoxHeight >= oImgWidth / oImgHeight) {
           oImg1 ? oImg1.style.width = '100%' : null
@@ -346,6 +357,9 @@
     watch: {
       theme () {
         return this.main()
+      },
+      resourceContent () {
+        return this.main()
       }
     },
     computed: {
@@ -361,9 +375,6 @@
     },
     mounted () {
       this.main()    
-      if (!this.isList) {
-        this.setResource()
-      }
     },
     created () {
       window.onresize = () => {
@@ -399,6 +410,7 @@
         position: absolute;
         width: 100%;
         height: 100%;
+        overflow: hidden;
         .ad-desription {
           font-size: 13px;
           color: #fff;
