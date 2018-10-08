@@ -137,13 +137,15 @@
         this.setResource()
       },
       getElementAttr (el) {
-        let w = Number(el ? el.style.width.replace('px', '') : 0)
-        let h = Number(el ? el.style.height.replace('px', '') : 0)
-        let t = Number(el ? el.style.top.replace('px', '') : 0)
-        let r = Number(el ? el.style.right.replace('px', '') : 0)
-        let b = Number(el ? el.style.bottom.replace('px', '') : 0)
-        let l = Number(el ? el.style.left.replace('px', '') : 0)
-        return {w, h, t, r, b, l} 
+        if (el) {
+          let w = Number(el.style.width.replace('px', ''))
+          let h = Number(el.style.height.replace('px', ''))
+          let t = Number(el.style.top.replace('px', ''))
+          let r = Number(el.style.right.replace('px', ''))
+          let b = Number(el.style.bottom.replace('px', ''))
+          let l = Number(el.style.left.replace('px', ''))
+          return {w, h, t, r, b, l} 
+        }
       },
       loadImageAsync (url) {
         return new Promise((resolve, reject) => {
@@ -175,20 +177,23 @@
               })
               sup2.load(() => {
                 //隐藏静态图
-                document.querySelector(`#${this.id} #mask`) ? document.querySelector(`#${this.id} #mask`).style.display = 'none' : ''
+                document.querySelector(`#${this.id} #mask`).style.display = 'none'
                 //显示第二张
-                document.querySelector(`#${this.id} .displayBox`) ? document.querySelector(`#${this.id} .displayBox`).style.display = 'block' : ''
+                document.querySelector(`#${this.id} .displayBox`).style.display = 'block'
                 sup2.play()
                 this.setGifResPosition()
               })
             } else { // null -> noGif 
               // console.log('null -> noGif')
-              //隐藏静态图
-              document.querySelector(`#${this.id} #mask`) ? document.querySelector(`#${this.id} #mask`).style.display = 'none' : ''
-              //显示第二张
-              document.querySelector(`#${this.id} .displayBox`) ? document.querySelector(`#${this.id} .displayBox`).style.display = 'block' : ''
-              document.querySelector(`#${this.id} .displayBox > img`) ? document.querySelector(`#${this.id} .displayBox > img`).src = this.displayImg.url : ''
-              this.setNoGifResPosition()
+              //加载 noGif 图片
+              this.loadImageAsync(this.displayImg.url).then(() => {
+                //隐藏静态图
+                document.querySelector(`#${this.id} #mask`).style.display = 'none'
+                //显示第二张
+                document.querySelector(`#${this.id} .displayBox`).style.display = 'block'
+                document.querySelector(`#${this.id} .displayBox > img`).src = this.displayImg.url 
+                this.setNoGifResPosition()
+              })
             }
           } else if (this.isGif(this.entranceImg.format)) {
             if (this.displayImg.url == undefined) { // gif -> null
@@ -202,9 +207,9 @@
               })
               sup1.load(() => {
                 //隐藏静态图
-                document.querySelector(`#${this.id} #mask`) ? document.querySelector(`#${this.id} #mask`).style.display = 'none' : ''
+                document.querySelector(`#${this.id} #mask`).style.display = 'none'
                 //显示第一张
-                document.querySelector(`#${this.id} .entranceBox`) ? document.querySelector(`#${this.id} .entranceBox`).style.display = 'block' : ''
+                document.querySelector(`#${this.id} .entranceBox`).style.display = 'block'
                 sup1.play()
                 this.setGifResPosition()
               })
@@ -215,66 +220,76 @@
                 on_end: () => {
                   sup1.pause()
                   // 隐藏第一张
-                  document.querySelector(`#${this.id} .entranceBox`) ? document.querySelector(`#${this.id} .entranceBox`).style.display = 'none' : ''
+                  document.querySelector(`#${this.id} .entranceBox`).style.display = 'none'
                   // 显示第二张
-                  document.querySelector(`#${this.id} .displayBox`) ? document.querySelector(`#${this.id} .displayBox`).style.display = 'block' : ''
-                  document.querySelector(`#${this.id} .displayBox > img`) ? document.querySelector(`#${this.id} .displayBox > img`).src = this.displayImg.url : ''
+                  document.querySelector(`#${this.id} .displayBox`).style.display = 'block'
+                  document.querySelector(`#${this.id} .displayBox > img`).src = this.displayImg.url
                   this.setNoGifResPosition()
                 }
               })
               sup1.load(() => {
-                // //隐藏静态图
-                document.querySelector(`#${this.id} #mask`) ? document.querySelector(`#${this.id} #mask`).style.display = 'none' : ''
-                //显示第一张
-                document.querySelector(`#${this.id} .entranceBox`) ? document.querySelector(`#${this.id} .entranceBox`).style.display = 'block' : ''
-                sup1.play()
-                this.setGifResPosition()
+                this.loadImageAsync(this.displayImg.url).then(() => {
+                  // //隐藏静态图
+                  document.querySelector(`#${this.id} #mask`).style.display = 'none'
+                  //显示第一张
+                  document.querySelector(`#${this.id} .entranceBox`).style.display = 'block'
+                  sup1.play()
+                  this.setGifResPosition()
+                })
               })
             } 
           } else if (!this.isGif(this.entranceImg.format)) {
             if (this.displayImg.url == undefined) { //noGif -> null
               // console.log('noGif -> null')
-              //隐藏静态图
-              document.querySelector(`#${this.id} #mask`) ? document.querySelector(`#${this.id} #mask`).style.display = 'none' : ''
-              //显示第一张
-              document.querySelector(`#${this.id} .entranceBox`) ? document.querySelector(`#${this.id} .entranceBox`).style.display = 'block' : ''
-              document.querySelector(`#${this.id} .entranceBox > img`).src = this.entranceImg.url
-              this.setNoGifResPosition()
+              this.loadImageAsync(this.entranceImg.url).then(() => {
+                //隐藏静态图
+                document.querySelector(`#${this.id} #mask`).style.display = 'none'
+                //显示第一张
+                document.querySelector(`#${this.id} .entranceBox`).style.display = 'block'
+                document.querySelector(`#${this.id} .entranceBox > img`).src = this.entranceImg.url
+                this.setNoGifResPosition()
+              })
             } else if (this.isGif(this.displayImg.format)) {  //noGif -> Gif
               // console.log('noGif -> Gif')
               let sup2 = new SuperGif({ 
                 gif: document.querySelector(`#${this.id} #display-gif`),
               })
               sup2.load(() => {
-                //隐藏静态图
-                document.querySelector(`#${this.id} #mask`) ? document.querySelector(`#${this.id} #mask`).style.display = 'none' : ''
-                //显示第一张
-                document.querySelector(`#${this.id} .entranceBox`) ? document.querySelector(`#${this.id} .entranceBox`).style.display = 'block' : ''
-                document.querySelector(`#${this.id} .entranceBox > img`).src = this.entranceImg.url
-                this.setNoGifResPosition()
-                setTimeout(() => {
-                  // 隐藏第一张
-                  document.querySelector(`#${this.id} .entranceBox`) ? document.querySelector(`#${this.id} .entranceBox`).style.display = 'none' : ''
-                  // 显示第二张
-                  document.querySelector(`#${this.id} .displayBox`) ? document.querySelector(`#${this.id} .displayBox`).style.display = 'block' : ''
-                  sup2.play()
-                  this.setGifResPosition()
-                }, this.entranceImg.duration * 1000)
+                this.loadImageAsync(this.entranceImg.url).then(() => {
+                  //隐藏静态图
+                  document.querySelector(`#${this.id} #mask`).style.display = 'none'
+                  //显示第一张
+                  document.querySelector(`#${this.id} .entranceBox`).style.display = 'block'
+                  document.querySelector(`#${this.id} .entranceBox > img`).src = this.entranceImg.url
+                  this.setNoGifResPosition()
+                  setTimeout(() => {
+                    // 隐藏第一张
+                    document.querySelector(`#${this.id} .entranceBox`).style.display = 'none'
+                    // 显示第二张
+                    document.querySelector(`#${this.id} .displayBox`).style.display = 'block'
+                    sup2.play()
+                    this.setGifResPosition()
+                  }, this.entranceImg.duration * 1000)
+                })
               })
             } else { //noGif -> noGif
-              //隐藏静态图
-              document.querySelector(`#${this.id} #mask`) ? document.querySelector(`#${this.id} #mask`).style.display = 'none' : ''
-              //显示第一张
-              document.querySelector(`#${this.id} .entranceBox`) ? document.querySelector(`#${this.id} .entranceBox`).style.display = 'block' : ''
-              document.querySelector(`#${this.id} .entranceBox > img`).src = this.entranceImg.url
-              this.setNoGifResPosition()
-              setTimeout(() => {
-                // 隐藏第一张
-                document.querySelector(`#${this.id} .entranceBox`) ? document.querySelector(`#${this.id} .entranceBox`).style.display = 'none' : ''
-                // 显示第二张
-                document.querySelector(`#${this.id} .displayBox`) ? document.querySelector(`#${this.id} .displayBox`).style.display = 'block' : ''
-                document.querySelector(`#${this.id} .displayBox > img`) ? document.querySelector(`#${this.id} .displayBox > img`).src = this.displayImg.url : ''
-              }, this.entranceImg.duration * 1000)
+              this.loadImageAsync(this.entranceImg.url)
+                .then(this.loadImageAsync(this.displayImg.url))
+                  .then(() => {
+                    //隐藏静态图
+                    document.querySelector(`#${this.id} #mask`).style.display = 'none'
+                    //显示第一张
+                    document.querySelector(`#${this.id} .entranceBox`).style.display = 'block'
+                    document.querySelector(`#${this.id} .entranceBox > img`).src = this.entranceImg.url
+                    this.setNoGifResPosition()
+                    setTimeout(() => {
+                      // 隐藏第一张
+                      document.querySelector(`#${this.id} .entranceBox`).style.display = 'none'
+                      // 显示第二张
+                      document.querySelector(`#${this.id} .displayBox`).style.display = 'block'
+                      document.querySelector(`#${this.id} .displayBox > img`).src = this.displayImg.url
+                    }, this.entranceImg.duration * 1000)
+                  })
             }
           }
         } catch (err) {
