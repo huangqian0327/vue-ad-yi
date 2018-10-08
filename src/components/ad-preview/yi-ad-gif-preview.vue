@@ -410,19 +410,17 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        overflow: hidden;
         .ad-desription {
           font-size: 13px;
           color: #fff;
           box-sizing: border-box;
           position: absolute;
-           top: -11%;
-           width: 100%;
-           height: 10%;
+          top: -11%;
+          width: 100%;
+          height: 10%;
           > div {
             width: 10%;
             height: 100%;
-            background-position: center;
             background-size: contain;
             background-repeat: no-repeat;
             z-index: 99999;
@@ -431,12 +429,13 @@
               cursor: auto;
               background-image: url('../../assets/ad.png');
               left: 0;
+              background-position: left center;
             }
             &.closeBtn {
               cursor: pointer;
               background-image: url('../../assets/close.png');
               right: 0;
-              background-position: right;
+              background-position: right center;
             }
           }
         }
@@ -455,6 +454,7 @@
           .jsgif {
             width: 100%;
             height: 100%;
+            overflow: hidden;
           }
         }
         .displayBox {
@@ -465,6 +465,7 @@
           .jsgif {
             width: 100%;
             height: 100%;
+            overflow: hidden;
           }
         }
       } // end theme
