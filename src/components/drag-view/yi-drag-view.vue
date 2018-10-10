@@ -18,13 +18,9 @@
         inserted: (el, binding, vnode) => {
           let oDiv = document.querySelector('#container')
           let that = vnode.context
-          that.maxLeft = oDiv.offsetLeft
-          that.maxTop = oDiv.offsetTop
-
           oDiv.onmousedown = (e) => {
             let disX = e.clientX - oDiv.offsetLeft
             let disY = e.clientY - oDiv.offsetTop
-
             document.onmousemove = (e) => {
               let l = e.clientX - disX
               let t = e.clientY - disY
@@ -65,11 +61,13 @@
       },
     },
     mounted () {
+      this.maxLeft = window.innerWidth - 444
+      this.maxTop = window.innerHeight - 240
       document.body.onresize = () => {
         // document.querySelector('#container').style.left = window.innerWidth - 400 + 'px'
         // document.querySelector('#container').style.top =  window.innerHeight - 300 + 'px'
-        this.maxLeft = window.innerWidth - 400
-        this.maxTop = window.innerHeight - 300
+        this.maxLeft = window.innerWidth - 444
+        this.maxTop = window.innerHeight - 240
         if (Number(document.querySelector('#container').style.left.replace('px', '')) > this.maxLeft) {
           document.querySelector('#container').style.left = this.maxLeft + 'px'
         }
@@ -86,14 +84,15 @@
   .dragView {
     // position: relative;
     #container {
-      width: 400px;
-      height: 300px;
-      position: absolute;
+      width: 427px;
+      height: 240px;
+      position: fixed;
       bottom: 0;
-      right: 0;
-      background-color: #f00;
+      right: 5%;
+      // background-color: #f00;
       cursor: move;
-      z-index: 999;
+      z-index: 9;
     }
+
   }
 </style>
