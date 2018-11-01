@@ -76,6 +76,9 @@
         }
         
       }
+    },
+    destroyed () {
+      document.body.onresize = null
     }
   }
 </script>
